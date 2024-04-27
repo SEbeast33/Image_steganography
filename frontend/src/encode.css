@@ -1,4 +1,9 @@
-
+.background {
+    background-color: #fab2ff;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
 .body_container{
     width: 100%;
     height: auto;
@@ -9,14 +14,16 @@
 }
 
 .encode_container{
+    background-image: linear-gradient(135deg, #ffffff 10%, #bb8ede 100%);
     width: 100%;
 height: 39rem;
-
 display: flex;
 flex-flow: row wrap;
 align-self: center;
 justify-content: center;
+flex-direction: row;
 align-items: center;
+
 
 }
 
@@ -25,7 +32,7 @@ align-items: center;
    display: flex;
    flex-flow: row wrap;
    height: auto;
-   width: auto;
+   /* width: 12rem; */
 }
 .upload_image{
     margin: 2rem;
@@ -97,6 +104,8 @@ flex-shrink: 0;
 }
 
 .textbox{
+    padding-left: 1rem;
+    padding-right: 1rem;
     
     border: 'none';
     outline: 'none';
@@ -109,6 +118,7 @@ background: #F9F9F9;
 caret-color: red;
 caret-shape: bar;
 font-size: 1.3rem;
+text-wrap: wrap;
 
 }
 
@@ -123,12 +133,12 @@ font-weight: 400;
 line-height: normal;
 }
 .encode_button{
-  margin-left: 21rem;
+    margin-left: 23rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 16.50944rem;
-height: 4.875rem;
+    width: 14rem;
+height: 4rem;
 flex-shrink: 0;
 border-radius: 1.25rem;
 background: #6398FE;
@@ -141,12 +151,254 @@ button {
 
     color: #FFF;
 font-family: SansSerif;
-font-size: 1.875rem;
+font-size: 1.6rem;
 font-style: normal;
-font-weight: 700;
+font-weight: 550;
 line-height: normal;
 }
+
 .downloadimage{
-   
+    display: flex;
+    /* border-radius: 100%; */
+    /* width: 50%; */
+    justify-content: center;
+    align-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    flex-shrink: 0;
+    border-radius: 1.2rem;
+    background: rgb(248, 246, 248);
+    border-radius: 50%;
+  
+} 
+.share_section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+.sharebutton{
+    width: 25rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-flow: row wrap;
+  margin: 1rem;
 
 }
+.sharediv{
+    display: flex;
+    justify-content: space-between;
+    flex-flow: column;
+}
+
+
+.face_button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+    flex-shrink: 0;
+}
+
+.twitter_button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+    flex-shrink: 0;
+}
+
+.email_button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+}
+
+.download_logo{
+  width: 2.15rem;
+  height: 2.15rem;
+}
+input:focus {
+    outline: 2px solid rgb(164, 102, 215); 
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .decode_text{
+    padding: 2rem;
+    margin: 1rem;
+    width: 29rem;
+height: 9rem;
+flex-shrink: 0;
+border-radius: 1.25rem;
+border: 1px solid #F1F1F1;
+background: #F9F9F9;
+box-shadow: 0px 2px 10px 2px rgba(65, 60, 60, 0.25);
+color: #363131;
+font-family: SansSerif;
+font-size: 1.4375rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+  }
+
+  .decode_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+    height: 100vh;
+    background-image: linear-gradient(135deg, #ffffff 10%, #bb8ede 100%);
+
+  }
+
+  .decode_area{
+
+    width: 100%;
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+  }
+  .decode_button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12rem;
+height: 4rem;
+flex-shrink: 0;
+border-radius: 1.25rem;
+background: #6398FE;
+  }
+  .image_field1{
+    display: none;
+  }
+
+  .copy_section{
+    width: 100%;
+    height: 5rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .text-container{
+    width: 24.3125rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+height: 3.0625rem;
+flex-shrink: 0;
+border-radius: 0.375rem;
+border: 1px solid #393636;
+background: #FFF;
+  }
+
+  .linktocopy{
+    width: 21.3125rem;
+height: 3rem;
+padding: 0.6rem;
+overflow: scroll;
+
+
+  }
+
+  .copy-button{
+    width: 2.3rem;
+height: 2rem;
+flex-shrink: 0;
+margin: 0.2rem;
+cursor: pointer;
+  }
+
+  .key-container{
+    width: 18rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+height: 3.0625rem;
+flex-shrink: 0;
+border-radius: 0.375rem;
+border: 1px solid #393636;
+background: #FFF;
+  }
+
+  .copy-button-link{
+    width: 2.3rem;
+height: 2rem;
+flex-shrink: 0;
+margin: 0.2rem;
+cursor: pointer;
+  }
+
+  .link_input-text{
+    
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ 
+
+
+  }
+  .decode_input{
+    width: 58.625rem;
+height: 4rem;
+flex-shrink: 0;
+padding-left: 1rem;
+padding-right: 1rem;
+
+border-radius: 1.0625rem;
+border: 1px solid #AD9E9E;
+background: #FFF;
+box-shadow: 0px 4px 20px 10px rgba(110, 104, 104, 0.25);
+
+color: #AA9D9D;
+font-family: SansSerif;
+font-size: 1.4375rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+  }
+
+  .key_boxes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .decodetextsection{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Define scrollbar styles */
+::-webkit-scrollbar {
+    width: 0px; /* Width of the scrollbar */
+    height: 0px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #d12424; /* Color of the scrollbar handle */
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #cc1b1b; /* Color of the scrollbar handle on hover */
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #d22424; /* Color of the scrollbar track */
+  }
+  

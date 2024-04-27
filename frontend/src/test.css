@@ -1,0 +1,17 @@
+
+input[type='number']{
+    outline: none;
+  }
+.input_fields{
+    width: 6rem;
+    height: 1.8rem;
+    margin: 2rem;
+    padding: 1rem;
+    flex-shrink: 0;
+    border-radius: 1.0625rem;
+background: #ffffff;
+border: 1px solid #74EAFA;
+font-size: 1.3rem;
+
+
+}

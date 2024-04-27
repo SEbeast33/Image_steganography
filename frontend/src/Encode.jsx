@@ -1,11 +1,34 @@
 import React from 'react'
 import './encode.css'
-import { combologo, imagelogo, upload_icon } from './Assets/Assets'
+import { combologo, copy, done, dowloadlogo, imagelogo, upload_icon } from './Assets/Assets'
 import { useState } from 'react'
 import axios from 'axios';
+import {motion} from 'framer-motion'
+import imageCompression from 'browser-image-compression';
+import ImageCompressor from 'image-compressor';
+
+import {
+  EmailShareButton,
+  EmailIcon,
+  FacebookShareButton,
+  FacebookIcon,
+  LinkedinShareButton,
+  LinkedinIcon,
+  TwitterShareButton,
+  TwitterIcon,
+ 
+} from "react-share";
 
 const Encode = () => {
-    const [imagePath, setImagePath] = useState('');
+  // const shareUrl = 'https://github.com/';
+  const title = 'Check out this website!';
+  const [url,setUrl]=useState('');
+    const [imagePath, setImagePath] = useState(null);
+    const [copied1, setCopied] = useState(false);
+    const [copied2, setCopied2] = useState(false);
+    const [keyArray, setKeyArray] = useState([]);
+    const [keyString, setKeyString] = useState('');
+    const[imgtitle,setImageTitle]=useState('')
   const [filename, setFilename] = useState('');
   const [message, setMessage]= useState('')
   const [formData, setFormData] = useState({
@@ -19,13 +42,55 @@ const Encode = () => {
     const baseUrl = ' http://127.0.0.1:8080';
     return `${baseUrl}/${filename}`;
   };
+  const handleCopy = () => {
+    navigator.clipboard.writeText(filename);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
+  const handleCopy1 = () => {
+    navigator.clipboard.writeText(keyArray.join('-'));
+    setCopied2(true);
+    setTimeout(() => {
+      setCopied2(false);
+    }, 2000);
+  };
 
   const handleChange = (e) => {
     setMessage(e.target.value);
   };
 
-  const handleImageChange = (e) => {
-   setImagePath(e.target.files[0])
+  const handleImageChange = async(e) => {
+    const imageFile = e.target.files[0];
+    
+    setImageTitle(imageFile.name)
+  console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+  console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+  }
+  try {
+    const compressedFile = await imageCompression(imageFile, options);
+    console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+    console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+    // await uploadToServer(compressedFile); // write your own logic
+    const filed=blobToFile(compressedFile,'example.jpeg')
+    setImagePath(filed)
+  } catch (error) {
+    console.log(error);
+  }
+  // const imagepath=e.target.files[0];
+  // setImagePath(imagepath)
+  };
+
+  const blobToFile = (blob, fileName) => {
+    return new File([blob], fileName, { type: blob.type });
   };
   const handleDownload = async () => {
     try {
@@ -53,14 +118,17 @@ const Encode = () => {
     }
 };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(formData);
+    console.log(imagePath)
+    
     let form_data = new FormData();
     form_data.append('image', imagePath);
     form_data.append('title', message);
     form_data.append('content', 'this is random content');
-    let url = 'http://localhost:8000/api/posts/';
+    console.log(form_data)
+    // let url = 'http://localhost:8000/api/encode/';
+    let url = 'https://stegobackend.onrender.com/api/encode/';
     axios.post(url, form_data, {
       headers: {
         'content-type': 'multipart/form-data'
@@ -69,11 +137,24 @@ const Encode = () => {
       .then(res => {
         // console.log(res.data["en_image"]);
         setFilename(res.data["filename"]);
+        setKeyArray(res.data["key"]);
+        
         
       })
       .catch(err => console.log(err))
       console.log(filename)
+      console.log(keyString)
+      keyconverter()
+      
   };
+
+  const keyconverter=()=>{
+    const keyStr = keyArray.join('-');
+        setKeyString(keyStr);
+  }
+
+
+  
   return (
     <div className="bodycontainer">
     <div className='encode_container'>
@@ -91,6 +172,9 @@ const Encode = () => {
                 </div>
                 <div className="upload_icon">
                     <img src={upload_icon} alt="" />
+                </div>
+                <div>
+                  <p>{imgtitle}</p>
                 </div>
              </div>
             </div>   
@@ -110,13 +194,85 @@ const Encode = () => {
             </div>
         </div>
 
-        <div className="encode_button">
+        <motion.div className="encode_button"  whileHover={{scale:1.1,cursor:'pointer'}} whileTap={{scale:0.9}} >
         <button type="submit" className='textenc'>Encode</button>
-        </div>
+        </motion.div>
         </form>
+
+        <div className='copy_section'>
+        <div className="text-container">
+        <p className='linktocopy'>{filename}</p>
+        <button className="copy-button" onClick={handleCopy}>
+        {copied1 ? (
+          <img src={done} alt="Copied Logo" />
+        ) : (
+          <img src={copy} alt="Copy Logo" />
+        )}
+      </button>
+      </div>
+
+      <div className="key-container">
+        <p className='linktocopy'>{keyArray.join('-')}</p>
+        <button className="copy-button-link" onClick={handleCopy1}>
+        {copied2 ? (
+          <img src={done} alt="Copied Logo" />
+        ) : (
+          <img src={copy} alt="Copy Logo" />
+        )}
+      </button>
+      </div>
+     
+        </div>
+       <div className='share_section'>
+     
         
-        <button  onClick={handleDownload} className='downloadimage'>Download Image</button>
+        <div className='sharediv'> 
+         
+            <div className='sharebutton'>
+            <motion.button  onClick={handleDownload} className='downloadimage'whileHover={{scale:1.15,cursor:'pointer'}} >
+       <div className='download_logo'  >
+       <img src={dowloadlogo} alt="BigCo Inc. logo"/>
+       </div>
+       
+        </motion.button>
+              <motion.div className='face_button' whileHover={{scale:1.15}} >
+                {/* Facebook Share Button */}
+                <FacebookShareButton
+                    url={filename}
+                    quote={title}
+                    hashtag="#ExampleHashtag"
+                >
+                    <FacebookIcon size={45} round />
+                </FacebookShareButton>
+                </motion.div>
+
+              <motion.div className='twitter_button'whileHover={{scale:1.15}} >
+                {/* Twitter Share Button */}
+                <TwitterShareButton
+                    url={filename}
+                    title={title}
+                    hashtags={['ExampleHashtag']}
+                >
+                    <TwitterIcon size={45} round />
+                </TwitterShareButton>
+              </motion.div>
+
+              <motion.div className='email_button'whileHover={{scale:1.15}} >
+                {/* Email Share Button */}
+                <EmailShareButton
+                    url={filename}
+                    subject={title}
+                    body="Check out this site: "
+                >
+                    <EmailIcon size={45} round />
+                </EmailShareButton>
+                </motion.div>
+            </div>  </div>
+       </div>
     </div>
+    
+    
+
     
     </div>
   )

@@ -5,6 +5,7 @@ import Encode from './Encode';
 import { BrowserRouter as Router, Link, Route, Switch,Routes } from 'react-router-dom';
 import Decode from './Decode';
 import VideoStego from './Videostego';
+import KeyInputForm from './test';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
   //  <Encode/>
   //  </>
 
+  
   <Router>
     <><Header/></>
   <Routes>
