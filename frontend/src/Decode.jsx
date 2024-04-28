@@ -40,8 +40,13 @@ const Decode = () => {
     console.log(keyArray)
     formData.append('link', link);
     formData.append('key_array', keyArray);
+    if (!link || !keyArray) {
+      
+      alert('Please enter an image link or enter a key.');
+      return;
+    }
     
-    axios.post('https://stegobackend.onrender.com/api/decodewithlink/', formData, {
+    axios.post('http://127.0.0.1:8000/api/decodewithlink/', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

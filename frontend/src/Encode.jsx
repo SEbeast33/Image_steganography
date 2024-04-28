@@ -16,20 +16,24 @@ import {
   LinkedinIcon,
   TwitterShareButton,
   TwitterIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
  
 } from "react-share";
 
 const Encode = () => {
   // const shareUrl = 'https://github.com/';
-  const title = 'Check out this website!';
+  const title = 'Check out this image!';
   const [url,setUrl]=useState('');
     const [imagePath, setImagePath] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [copied1, setCopied] = useState(false);
     const [copied2, setCopied2] = useState(false);
     const [keyArray, setKeyArray] = useState([]);
     const [keyString, setKeyString] = useState('');
     const[imgtitle,setImageTitle]=useState('')
   const [filename, setFilename] = useState('');
+  const [imagePreview, setImagePreview] = useState(null);
   const [message, setMessage]= useState('')
   const [formData, setFormData] = useState({
     title: '',
@@ -64,6 +68,16 @@ const Encode = () => {
 
   const handleImageChange = async(e) => {
     const imageFile = e.target.files[0];
+
+    if (imageFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Set the image preview to the result of the FileReader
+        setImagePreview(reader.result);
+       
+      };
+      reader.readAsDataURL(imageFile); // Read the file as a data URL
+    }
     
     setImageTitle(imageFile.name)
   console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
@@ -118,15 +132,60 @@ const Encode = () => {
     }
 };
 
-  const handleSubmit = async(e) => {
+  // const handleSubmit = async(e) => {
+  //   e.preventDefault();
+  //   console.log(imagePath)
+    
+  //   let form_data = new FormData();
+  //   form_data.append('image', imagePath);
+  //   form_data.append('title', message);
+  //   form_data.append('content', 'this is random content');
+  //   console.log(form_data)
+  //   // let url = 'http://localhost:8000/api/encode/';
+  //   let url = 'https://stegobackend.onrender.com/api/encode/';
+  //   axios.post(url, form_data, {
+  //     headers: {
+  //       'content-type': 'multipart/form-data'
+  //     }
+  //   })
+  //     .then(res => {
+  //       // console.log(res.data["en_image"]);
+  //       setFilename(res.data["filename"]);
+  //       setKeyArray(res.data["key"]);
+        
+        
+  //     })
+  //     .catch(err => console.log(err))
+  //     console.log(filename)
+  //     console.log(keyString)
+  //     keyconverter()
+      
+  // };
+
+  // const keyconverter=()=>{
+  //   const keyStr = keyArray.join('-');
+  //       setKeyString(keyStr);
+  // }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(imagePath)
+    setLoading(true); // Set loading state to true
+    
+    // Your existing code
+    console.log(imagePath);
     
     let form_data = new FormData();
     form_data.append('image', imagePath);
     form_data.append('title', message);
     form_data.append('content', 'this is random content');
-    console.log(form_data)
+    console.log(form_data);
+
+    if (!imagePath || !message) {
+      setLoading(false); // Clear loading state
+      alert('Please select an image or enter a message.');
+      return;
+    }
+    
     // let url = 'http://localhost:8000/api/encode/';
     let url = 'https://stegobackend.onrender.com/api/encode/';
     axios.post(url, form_data, {
@@ -134,24 +193,26 @@ const Encode = () => {
         'content-type': 'multipart/form-data'
       }
     })
-      .then(res => {
-        // console.log(res.data["en_image"]);
-        setFilename(res.data["filename"]);
-        setKeyArray(res.data["key"]);
-        
-        
-      })
-      .catch(err => console.log(err))
-      console.log(filename)
-      console.log(keyString)
-      keyconverter()
-      
+    .then(res => {
+      setLoading(false); // Clear loading state
+      // console.log(res.data["en_image"]);
+      setFilename(res.data["filename"]);
+      setKeyArray(res.data["key"]);
+    })
+    .catch(err => {
+      setLoading(false); // Clear loading state in case of error
+      console.log(err);
+    });
+  
+    console.log(filename);
+    console.log(keyString);
+    keyconverter();
   };
-
-  const keyconverter=()=>{
+  
+  const keyconverter = () => {
     const keyStr = keyArray.join('-');
-        setKeyString(keyStr);
-  }
+    setKeyString(keyStr);
+  };
 
 
   
@@ -162,7 +223,7 @@ const Encode = () => {
         <div className="upload_container">
             
         <input type="file" accept="image/*" onChange={handleImageChange} className='image_field' value={formData.title} />
-            <div className="upload_image" onClick={()=>{document.querySelector('.image_field').click() }}>
+            {/* <motion.div className="upload_image" onClick={()=>{document.querySelector('.image_field').click() }}  whileHover={{cursor:'pointer'}}  >
              <div className="image_logo">
               <img src={imagelogo} alt="" />
              </div>
@@ -174,10 +235,49 @@ const Encode = () => {
                     <img src={upload_icon} alt="" />
                 </div>
                 <div>
-                  <p>{imgtitle}</p>
+                  <p className='image_title'>{imgtitle}</p>
                 </div>
              </div>
-            </div>   
+            </motion.div>   */}
+
+<motion.div
+        className="upload_image"
+        onClick={() => {
+          document.querySelector('.image_field').click();
+        }}
+        whileHover={{ cursor: 'pointer' }}
+        style={{ position: 'relative', overflow: 'hidden' }} // Ensure the image fits within the container
+      >
+        {imagePreview && (
+          <img
+            src={imagePreview}
+            alt="Preview"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover', // Ensure the image fills the container
+            }}
+          />
+        )}
+        <div className="image_logo">
+              <img src={imagelogo} alt="" />
+             </div>
+             <div className="upload_logo">
+                <div className="upload_text">
+                    Upload image
+                </div>
+                <div className="upload_icon">
+                    <img src={upload_icon} alt="" />
+                </div>
+                <div>
+                  <p className='image_title'>{imgtitle}</p>
+                </div>
+             </div>
+      </motion.div>
+
             <div className="combo_logo">
                <img src={combologo} alt="" />
             </div>
@@ -189,6 +289,7 @@ const Encode = () => {
         placeholder="Enter the secret message"
        
         onChange={handleChange}
+        
       />
       {/* <input type="text" placeholder='Title' id='title' value={formData.title} onChange={handleChange} required className='textbox' /> */}
             </div>
@@ -198,10 +299,10 @@ const Encode = () => {
         <button type="submit" className='textenc'>Encode</button>
         </motion.div>
         </form>
-
+         
         <div className='copy_section'>
         <div className="text-container">
-        <p className='linktocopy'>{filename}</p>
+        <p className='linktocopy'>{loading ? 'Your encrypted image is getting ready...' : filename}</p>
         <button className="copy-button" onClick={handleCopy}>
         {copied1 ? (
           <img src={done} alt="Copied Logo" />
@@ -212,7 +313,7 @@ const Encode = () => {
       </div>
 
       <div className="key-container">
-        <p className='linktocopy'>{keyArray.join('-')}</p>
+        <p className='linktocopy'>{loading ? 'Your key is generating...' : keyArray.join('-')}</p>
         <button className="copy-button-link" onClick={handleCopy1}>
         {copied2 ? (
           <img src={done} alt="Copied Logo" />
@@ -227,14 +328,25 @@ const Encode = () => {
      
         
         <div className='sharediv'> 
+
          
             <div className='sharebutton'>
-            <motion.button  onClick={handleDownload} className='downloadimage'whileHover={{scale:1.15,cursor:'pointer'}} >
+            {/* <motion.button  onClick={handleDownload} className='downloadimage'whileHover={{scale:1.15,cursor:'pointer'}} >
        <div className='download_logo'  >
        <img src={dowloadlogo} alt="BigCo Inc. logo"/>
        </div>
        
-        </motion.button>
+        </motion.button> */}
+         <motion.div className='face_button' whileHover={{scale:1.15}} >
+                {/* Facebook Share Button */}
+                <WhatsappShareButton
+                    url={filename}
+                    quote={title}
+                    hashtag="#ExampleHashtag"
+                >
+                    <WhatsappIcon size={45} round />
+                </WhatsappShareButton>
+                </motion.div>
               <motion.div className='face_button' whileHover={{scale:1.15}} >
                 {/* Facebook Share Button */}
                 <FacebookShareButton
