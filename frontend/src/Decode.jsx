@@ -46,7 +46,7 @@ const Decode = () => {
       return;
     }
     
-    axios.post('http://127.0.0.1:8000/api/decodewithlink/', formData, {
+    axios.post('https://stegobackend.onrender.com/api/decodewithlink/', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
